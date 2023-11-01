@@ -20,6 +20,10 @@ public class PlayerLife : MonoBehaviour
         if(playerHealth.getHealth() <= 0 && !PlayerMovement.god){
             Die();
         }
+
+        if(Input.GetKeyDown("r")){
+            RestartLevel();
+        }
     }
 
     // Update is called once per frame

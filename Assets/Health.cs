@@ -10,9 +10,7 @@ public class Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameObject.CompareTag("Enemy") && health <= 0){
-            Destroy(gameObject);
-        }
+
     }
 
     public void Damage(int amount){

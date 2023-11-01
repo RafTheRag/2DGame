@@ -5,48 +5,43 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    private GameObject attackArea = default;
 
-    private Rigidbody2D rb;
-    private bool attacking = false;
 
-    private float timeToAttack = 0.25f;
-    private float timer = 0f;
-    void Start()
-    {
-        attackArea = transform.GetChild(0).gameObject;
-        rb = GetComponent<Rigidbody2D>();
-    }
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask enemyLayers;
+    public int swipeDamage = 20;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetMouseButtonDown(0)){
-            Swipe();
-        }
+    public int slashDamage = 30;
+
+    void Update(){
+
         
-        if(Input.GetMouseButtonDown(1)){
-            Slash();
-        }
-
-        if(attacking){
-            timer += Time.deltaTime;
-
-            if(timer >= timeToAttack){
-                timer = 0;
-                attacking = false;
-                attackArea.SetActive(attacking);
-            }
-        }
     }
 
-    private void Swipe(){
-        attacking = true;
-        attackArea.SetActive(attacking);
+    public void SwipeAttack(){
+       Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+       foreach(Collider2D enemy in hitEnemies){
+            enemy.GetComponent<Enemy>().TakeDamage(swipeDamage);
+       }
+
     }
 
-    private void Slash(){
-        attacking = true;
-        attackArea.SetActive(attacking);
+    public void SlashAttack(){
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+       foreach(Collider2D enemy in hitEnemies){
+            enemy.GetComponent<Enemy>().TakeDamage(slashDamage);
+       }
     }
+
+    void OnDrawGizmosSelected(){
+
+        if(attackPoint == null) return;
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+
 }
